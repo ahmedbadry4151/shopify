@@ -1,0 +1,38 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    },
+    "search": {
+      "placeholder": "Search our products...",
+      "submit": "Search",
+      "results_count": "Found {{ count }} results for \"{{ terms }}\""
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Cart",
+      "empty": "Your Cart is Empty",
+      "continue_shopping": "Continue Shopping",
+      "total": "Total",
+      "checkout": "Checkout",
+      "remove": "Remove item",
+      "adding": "Adding...",
+      "added_success": "Product added successfully!",
+      "error": "Error adding to cart."
+    },
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "back_to_collections": "Back"
+    },
+    "contact": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send",
+      "success_message": "Your message has been sent successfully!",
+      "error_message": "Please correct the errors below."
+    }
+  }
+}

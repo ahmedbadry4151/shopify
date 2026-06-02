@@ -1,0 +1,98 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Asl Arabic Streetwear",
+    "theme_version": "1.0.0",
+    "theme_author": "Antigravity",
+    "theme_documentation_url": "https://github.com/asl-brand",
+    "theme_support_url": "https://github.com/asl-brand"
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Heading Font",
+        "default": "outfit_n7"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body Font",
+        "default": "space_grotesk_n4"
+      }
+    ]
+  },
+  {
+    "name": "Theme Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Brand Gold",
+        "default": "#b99335"
+      },
+      {
+        "type": "color",
+        "id": "color_green",
+        "label": "Brand Green (Sage)",
+        "default": "#396b52"
+      },
+      {
+        "type": "color",
+        "id": "color_blue",
+        "label": "Brand Blue (Royal)",
+        "default": "#2e5f8f"
+      },
+      {
+        "type": "color",
+        "id": "color_charcoal",
+        "label": "Brand Charcoal",
+        "default": "#2e2e2e"
+      },
+      {
+        "type": "color",
+        "id": "color_red",
+        "label": "Brand Red",
+        "default": "#be2d2d"
+      }
+    ]
+  },
+  {
+    "name": "Social Media Links",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter URL"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon Image",
+        "info": "Will be scaled to 32x32px"
+      }
+    ]
+  }
+]

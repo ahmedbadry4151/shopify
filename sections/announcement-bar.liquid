@@ -1,0 +1,46 @@
+{%- if section.settings.show_announcement -%}
+  <div class="bg-primary text-primary-foreground py-2 text-center text-xs font-semibold uppercase tracking-wider transition-colors duration-300">
+    {%- if section.settings.link != blank -%}
+      <a href="{{ section.settings.link }}" class="hover:underline">
+    {%- endif -%}
+      {%- if request.locale.iso_code == 'ar' -%}
+        {{ section.settings.text_ar }}
+      {%- else -%}
+        {{ section.settings.text_en }}
+      {%- endif -%}
+    {%- if section.settings.link != blank -%}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show Announcement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_ar",
+      "label": "Text (Arabic)",
+      "default": "شحن مجاني للطلبات فوق 1000 جنيه"
+    },
+    {
+      "type": "text",
+      "id": "text_en",
+      "label": "Text (English)",
+      "default": "Free shipping on orders over $50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ]
+}
+{% endschema %}

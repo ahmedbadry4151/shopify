@@ -1,0 +1,42 @@
+<footer class="border-t border-border py-12 mt-20 bg-background/50">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <p class="font-display text-2xl font-bold text-gradient-gold">
+        {{ section.settings.brand_name | default: shop.name }}
+      </p>
+      <p class="text-xs text-muted-foreground tracking-wide">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.copyright_ar }}
+        {%- else -%}
+          {{ section.settings.copyright_en }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand Name",
+      "default": "أصل"
+    },
+    {
+      "type": "text",
+      "id": "copyright_ar",
+      "label": "Copyright (Arabic)",
+      "default": "© 2026 أصل. جميع الحقوق محفوظة"
+    },
+    {
+      "type": "text",
+      "id": "copyright_en",
+      "label": "Copyright (English)",
+      "default": "© 2026 Asl. All rights reserved"
+    }
+  ]
+}
+{% endschema %}

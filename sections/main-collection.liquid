@@ -1,0 +1,192 @@
+<div class="container mx-auto pt-12 pb-20 px-6">
+  <div class="mb-8 {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+    <h1 class="font-display text-4xl font-bold mb-2">
+      {{ collection.title | default: "Collections" }}
+    </h1>
+    {%- if collection.description != blank -%}
+      <div class="text-muted-foreground mb-4">
+        {{ collection.description }}
+      </div>
+    {%- else -%}
+      <p class="text-muted-foreground">
+        {%- if request.locale.iso_code == 'ar' -%}
+          جميع القطع من المجموعة.
+        {%- else -%}
+          All pieces from the collection.
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  <!-- Color Filter Tabs (Dynamic JS Filtering) -->
+  <div class="flex gap-2 mb-8 flex-wrap {% if request.locale.iso_code == 'ar' %}flex-row-reverse{% endif %}" id="CollectionFilters">
+    <button
+      data-filter="all"
+      class="filter-btn px-4 py-1.5 text-xs uppercase tracking-wider rounded border transition-colors bg-primary text-primary-foreground border-primary"
+    >
+      {%- if request.locale.iso_code == 'ar' -%}الكل{%- else -%}All{%- endif -%}
+    </button>
+    
+    <!-- Standard colors configured for streetwear brand -->
+    <button
+      data-filter="white"
+      class="filter-btn px-4 py-1.5 text-xs uppercase tracking-wider rounded border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+    >
+      {%- if request.locale.iso_code == 'ar' -%}أبيض{%- else -%}White{%- endif -%}
+    </button>
+    <button
+      data-filter="green"
+      class="filter-btn px-4 py-1.5 text-xs uppercase tracking-wider rounded border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+    >
+      {%- if request.locale.iso_code == 'ar' -%}أخضر{%- else -%}Green{%- endif -%}
+    </button>
+    <button
+      data-filter="blue"
+      class="filter-btn px-4 py-1.5 text-xs uppercase tracking-wider rounded border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+    >
+      {%- if request.locale.iso_code == 'ar' -%}أزرق{%- else -%}Blue{%- endif -%}
+    </button>
+    <button
+      data-filter="charcoal"
+      class="filter-btn px-4 py-1.5 text-xs uppercase tracking-wider rounded border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+    >
+      {%- if request.locale.iso_code == 'ar' -%}فحمي{%- else -%}Charcoal{%- endif -%}
+    </button>
+  </div>
+
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div 
+      id="CollectionProductGrid" 
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+    >
+      {%- if collection.products_count > 0 -%}
+        {%- for product in collection.products -%}
+          <!-- Extract colors for filtering -->
+          {%- assign product_colors = "" -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign downcase_name = option.name | downcase -%}
+            {%- if downcase_name contains 'color' or downcase_name contains 'لون' -%}
+              {%- for value in option.values -%}
+                {%- assign val_slug = value | downcase | escape -%}
+                {%- assign product_colors = product_colors | append: val_slug | append: " " -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+          
+          {%- for tag in product.tags -%}
+            {%- assign tag_slug = tag | downcase | escape -%}
+            {%- assign product_colors = product_colors | append: tag_slug | append: " " -%}
+          {%- endfor -%}
+
+          {%- if product_colors == blank -%}
+            {%- assign title_downcase = product.title | downcase -%}
+            {%- if title_downcase contains 'white' or title_downcase contains 'أبيض' -%}
+              {%- assign product_colors = "white " -%}
+            {%- elsif title_downcase contains 'green' or title_downcase contains 'أخضر' -%}
+              {%- assign product_colors = "green " -%}
+            {%- elsif title_downcase contains 'blue' or title_downcase contains 'أزرق' -%}
+              {%- assign product_colors = "blue " -%}
+            {%- elsif title_downcase contains 'charcoal' or title_downcase contains 'فحمي' -%}
+              {%- assign product_colors = "charcoal " -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          <div class="collection-product-item" data-colors="{{ product_colors | strip }}">
+            {% render 'product-card', product: product, index: forloop.index0 %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <div class="col-span-full text-center py-20">
+          <p class="text-muted-foreground">
+            {%- if request.locale.iso_code == 'ar' -%}لا يوجد منتجات في هذه المجموعة.{%- else -%}No products found in this collection.{%- endif -%}
+          </p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <div class="mt-12 flex justify-center gap-2">
+        {{ paginate | default_pagination: next: '→', previous: '←' }}
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('#CollectionFilters .filter-btn');
+    const productItems = document.querySelectorAll('#CollectionProductGrid .collection-product-item');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Toggle button states
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-primary-foreground', 'border-primary');
+          b.classList.add('border-border', 'text-muted-foreground', 'hover:text-foreground', 'hover:border-foreground');
+        });
+        btn.classList.add('bg-primary', 'text-primary-foreground', 'border-primary');
+        btn.classList.remove('border-border', 'text-muted-foreground', 'hover:text-foreground', 'hover:border-foreground');
+
+        const filterValue = btn.getAttribute('data-filter');
+
+        productItems.forEach(item => {
+          if (filterValue === 'all') {
+            item.style.display = 'block';
+          } else {
+            const colorsAttr = item.getAttribute('data-colors') || '';
+            const colorsList = colorsAttr.toLowerCase().split(' ');
+            if (colorsList.includes(filterValue)) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Pagination Styling */
+  .pagination {
+    display: inline-flex;
+    gap: 8px;
+  }
+  .pagination a, .pagination .current {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    border: 1px border-border;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  .pagination .current {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
+  }
+  .pagination a:hover {
+    border-color: hsl(var(--foreground));
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12,
+      "label": "Products per page"
+    }
+  ]
+}
+{% endschema %}

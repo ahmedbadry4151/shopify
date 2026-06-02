@@ -1,0 +1,143 @@
+<div class="container mx-auto pt-12 pb-20 px-6 animate-fade-up">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-6">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.title_ar }}
+        {%- else -%}
+          {{ section.settings.title_en }}
+        {%- endif -%}
+      </h1>
+      <p class="text-muted-foreground mb-12 text-lg">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.subtitle_ar }}
+        {%- else -%}
+          {{ section.settings.subtitle_en }}
+        {%- endif -%}
+      </p>
+    </div>
+
+    <!-- Image Banner -->
+    <div class="relative rounded overflow-hidden aspect-video mb-12 shadow-lg">
+      {%- if section.settings.image != blank -%}
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          alt="{{ section.settings.image.alt | escape }}"
+          class="w-full h-full object-cover"
+          width="1200"
+          height="675"
+        >
+      {%- else -%}
+        <!-- Fallback image (copied tee-green-couple) -->
+        <img
+          src="{{ 'tee-green-couple.jpeg' | asset_url }}"
+          alt="Our Story Banner"
+          class="w-full h-full object-cover"
+          width="1200"
+          height="675"
+        >
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
+    </div>
+
+    <!-- Content Paragraphs (Editable Blocks) -->
+    <div class="space-y-6 text-muted-foreground leading-relaxed text-lg {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'paragraph' -%}
+            <div {{ block.shopify_attributes }} class="story-paragraph">
+              {%- if request.locale.iso_code == 'ar' -%}
+                {{ block.settings.text_ar }}
+              {%- else -%}
+                {{ block.settings.text_en }}
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- if section.blocks.size == 0 -%}
+        <!-- Fallback default paragraphs if blocks are not configured yet -->
+        <p>
+          <span class="text-gradient-gold font-display font-bold text-2xl">{% if request.locale.iso_code == 'ar' %}أصل{% else %}Asl{% endif %}</span> — 
+          {%- if request.locale.iso_code == 'ar' -%}
+            مش مجرد براند ملابس. دي حركة ثقافية بدأت من شوارع القاهرة، من الخط العربي اللي بنشوفه على الجدران، ومن الفن الفرعوني اللي في دمنا.
+          {%- else -%}
+            is not just a clothing brand. It's a cultural movement born from the streets of Cairo, from the Arabic calligraphy on the walls, and the Pharaonic art in our blood.
+          {%- endif -%}
+        </p>
+        <p>
+          {%- if request.locale.iso_code == 'ar' -%}
+            كل قطعة بنصممها بتحكي قصة. بنمزج بين الكاليغرافي العربي والستريت آرت، بين التراث والمعاصر. قطعنا أوفرسايز عشان الراحة والستايل مع بعض.
+          {%- else -%}
+            Every piece we design tells a story. We blend Arabic calligraphy with street art, heritage with modernity. Our cuts are oversized for comfort and style combined.
+          {%- endif -%}
+        </p>
+        <p>
+          {%- if request.locale.iso_code == 'ar' -%}
+            بنؤمن إن الهوية مش حاجة بتتخبى — الهوية بتتلبس. و أصل هنا عشان تلبسك هويتك.
+          {%- else -%}
+            We believe identity isn't something you hide — it's something you wear. Asl is here to dress you in your identity.
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Story",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Story Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "Title (Arabic)",
+      "default": "قصتنا"
+    },
+    {
+      "type": "text",
+      "id": "title_en",
+      "label": "Title (English)",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "Subtitle (Arabic)",
+      "default": "من الشارع... للهوية"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_en",
+      "label": "Subtitle (English)",
+      "default": "From the streets... to identity"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text_ar",
+          "label": "Text (Arabic)",
+          "default": "<p>محتوى قصة أصل باللغة العربية.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "text_en",
+          "label": "Text (English)",
+          "default": "<p>Content of the Asl story in English.</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

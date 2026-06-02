@@ -1,0 +1,12 @@
+{
+  "name": "Story Page",
+  "sections": {
+    "main": {
+      "type": "main-story",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

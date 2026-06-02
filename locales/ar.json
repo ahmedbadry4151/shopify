@@ -1,0 +1,38 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "تخطي إلى المحتوى"
+    },
+    "search": {
+      "placeholder": "ابحث عن منتجاتنا...",
+      "submit": "بحث",
+      "results_count": "تم العثور على {{ count }} نتيجة لـ \"{{ terms }}\""
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "سلة التسوق",
+      "empty": "سلة التسوق فارغة",
+      "continue_shopping": "تابع التسوق",
+      "total": "المجموع",
+      "checkout": "إتمام الشراء",
+      "remove": "إزالة المنتج",
+      "adding": "جاري الإضافة...",
+      "added_success": "تمت إضافة المنتج بنجاح!",
+      "error": "حدث خطأ أثناء الإضافة."
+    },
+    "product": {
+      "add_to_cart": "أضف للسلة",
+      "sold_out": "نفذت الكمية",
+      "back_to_collections": "رجوع"
+    },
+    "contact": {
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "message": "الرسالة",
+      "send": "إرسال",
+      "success_message": "تم إرسال رسالتك بنجاح!",
+      "error_message": "يرجى تصحيح الأخطاء أدناه."
+    }
+  }
+}

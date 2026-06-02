@@ -1,0 +1,77 @@
+<div class="container mx-auto pt-12 pb-20 px-6">
+  <div class="mb-12 text-center max-w-xl mx-auto animate-fade-up">
+    <h1 class="font-display text-4xl font-bold mb-4">
+      {%- if request.locale.iso_code == 'ar' -%}
+        نتائج البحث
+      {%- else -%}
+        Search Results
+      {%- endif -%}
+    </h1>
+    
+    <!-- Search Form -->
+    <form action="{{ routes.search_url }}" method="get" role="search" class="relative mt-6">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{% if request.locale.iso_code == 'ar' %}ابحث عن منتجاتنا...{% else %}Search our products...{% endif %}"
+        class="w-full bg-muted border border-border rounded-full px-6 py-3.5 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-shadow {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
+      >
+      <button 
+        type="submit" 
+        class="absolute {% if request.locale.iso_code == 'ar' %}left-4{% else %}right-4{% endif %} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+        aria-label="Search"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </form>
+
+    <!-- Results feedback subtitle -->
+    {%- if search.performed -%}
+      <p class="text-muted-foreground mt-4 text-sm">
+        {%- if request.locale.iso_code == 'ar' -%}
+          تم العثور على {{ search.results_count }} نتيجة لـ "{{ search.terms }}"
+        {%- else -%}
+          Found {{ search.results_count }} results for "{{ search.terms }}"
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by section.settings.products_per_page -%}
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {% render 'product-card', product: item, index: forloop.index0 %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="mt-12 flex justify-center gap-2">
+          {{ paginate | default_pagination: next: '→', previous: '←' }}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main Search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12,
+      "label": "Products per page"
+    }
+  ]
+}
+{% endschema %}

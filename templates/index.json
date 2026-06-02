@@ -1,0 +1,45 @@
+{
+  "name": "Home Page",
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "subheading_ar": "ملابس الشارع العربية",
+        "subheading_en": "Arabic Streetwear",
+        "heading_ar_part1": "البس",
+        "heading_en_part1": "Wear",
+        "heading_ar_part2": "هويتك",
+        "heading_en_part2": "Your Identity",
+        "desc_ar": "خطوط عربية جريئة. فن فرعوني. قطع أوفرسايز. ثقافتنا في كل خيط.",
+        "desc_en": "Bold Arabic calligraphy. Pharaonic art. Oversized cuts. Our culture in every thread.",
+        "button_ar": "تسوّق الآن",
+        "button_en": "Shop Now"
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title_ar": "مميّز",
+        "title_en": "Featured",
+        "collection": "all",
+        "limit": 4
+      }
+    },
+    "promo-banner": {
+      "type": "promo-banner",
+      "settings": {
+        "subheading_ar": "مجموعة جديدة",
+        "subheading_en": "New Collection",
+        "heading_ar": "قصك في حاجة؟",
+        "heading_en": "Got Something?",
+        "button_ar": "اكتشف",
+        "button_en": "Discover"
+      }
+    }
+  },
+  "order": [
+    "hero-banner",
+    "featured-collection",
+    "promo-banner"
+  ]
+}

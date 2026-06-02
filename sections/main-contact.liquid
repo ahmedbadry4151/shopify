@@ -1,0 +1,202 @@
+<div class="container mx-auto pt-12 pb-20 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 animate-fade-up">
+      <h1 class="font-display text-4xl md:text-5xl font-bold mb-4">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.title_ar }}
+        {%- else -%}
+          {{ section.settings.title_en }}
+        {%- endif -%}
+      </h1>
+      <p class="text-muted-foreground text-lg">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.subtitle_ar }}
+        {%- else -%}
+          {{ section.settings.subtitle_en }}
+        {%- endif -%}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12">
+      <!-- Contact Info List -->
+      <div class="space-y-8 animate-fade-up">
+        <!-- Email Card -->
+        <div class="flex items-start gap-4 {% if request.locale.iso_code == 'ar' %}flex-row-reverse text-right{% endif %}">
+          <div class="w-10 h-10 rounded bg-muted flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold mb-1">
+              {%- if request.locale.iso_code == 'ar' -%}البريد الإلكتروني{%- else -%}Email{%- endif -%}
+            </p>
+            <p class="text-muted-foreground text-sm">{{ section.settings.email_info }}</p>
+          </div>
+        </div>
+
+        <!-- Phone Card -->
+        <div class="flex items-start gap-4 {% if request.locale.iso_code == 'ar' %}flex-row-reverse text-right{% endif %}">
+          <div class="w-10 h-10 rounded bg-muted flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold mb-1">
+              {%- if request.locale.iso_code == 'ar' -%}الهاتف{%- else -%}Phone{%- endif -%}
+            </p>
+            <p class="text-muted-foreground text-sm">{{ section.settings.phone_info }}</p>
+          </div>
+        </div>
+
+        <!-- Address Card -->
+        <div class="flex items-start gap-4 {% if request.locale.iso_code == 'ar' %}flex-row-reverse text-right{% endif %}">
+          <div class="w-10 h-10 rounded bg-muted flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold mb-1">
+              {%- if request.locale.iso_code == 'ar' -%}العنوان{%- else -%}Address{%- endif -%}
+            </p>
+            <p class="text-muted-foreground text-sm">
+              {%- if request.locale.iso_code == 'ar' -%}
+                {{ section.settings.address_info_ar }}
+              {%- else -%}
+                {{ section.settings.address_info_en }}
+              {%- endif -%}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="animate-fade-up" style="animation-delay: 150ms;">
+        {%- form 'contact', id: 'ContactForm' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="bg-primary/20 border border-primary text-primary p-4 rounded text-sm mb-6 text-center font-medium">
+              {%- if request.locale.iso_code == 'ar' -%}
+                تم إرسال رسالتك بنجاح!
+              {%- else -%}
+                Your message has been sent successfully!
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="bg-destructive/20 border border-destructive text-destructive p-4 rounded text-sm mb-6 text-center font-medium">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs text-muted-foreground uppercase tracking-widest mb-1.5 block {% if request.locale.iso_code == 'ar' %}text-right{% endif %}">
+                {%- if request.locale.iso_code == 'ar' -%}الاسم{%- else -%}Name{%- endif -%}
+              </label>
+              <input
+                type="text"
+                name="contact[name]"
+                id="ContactFormName"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                class="w-full bg-muted border border-border rounded px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-shadow {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
+                required
+              >
+            </div>
+            <div>
+              <label class="text-xs text-muted-foreground uppercase tracking-widest mb-1.5 block {% if request.locale.iso_code == 'ar' %}text-right{% endif %}">
+                {%- if request.locale.iso_code == 'ar' -%}البريد الإلكتروني{%- else -%}Email{%- endif -%}
+              </label>
+              <input
+                type="email"
+                name="contact[email]"
+                id="ContactFormEmail"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                class="w-full bg-muted border border-border rounded px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-shadow {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
+                required
+              >
+            </div>
+            <div>
+              <label class="text-xs text-muted-foreground uppercase tracking-widest mb-1.5 block {% if request.locale.iso_code == 'ar' %}text-right{% endif %}">
+                {%- if request.locale.iso_code == 'ar' -%}الرسالة{%- else -%}Message{%- endif -%}
+              </label>
+              <textarea
+                name="contact[body]"
+                id="ContactFormMessage"
+                rows="5"
+                class="w-full bg-muted border border-border rounded px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none transition-shadow {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
+                required
+              >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+            </div>
+            
+            <button
+              type="submit"
+              class="w-full bg-primary text-primary-foreground py-3 font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity rounded hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
+            >
+              {%- if request.locale.iso_code == 'ar' -%}إرسال{%- else -%}Send{%- endif -%}
+            </button>
+          </div>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Contact",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "Title (Arabic)",
+      "default": "تواصل معنا"
+    },
+    {
+      "type": "text",
+      "id": "title_en",
+      "label": "Title (English)",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "Subtitle (Arabic)",
+      "default": "نحب نسمع منك"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_en",
+      "label": "Subtitle (English)",
+      "default": "We'd love to hear from you"
+    },
+    {
+      "type": "text",
+      "id": "email_info",
+      "label": "Email Info",
+      "default": "info@asl-brand.com"
+    },
+    {
+      "type": "text",
+      "id": "phone_info",
+      "label": "Phone Info",
+      "default": "+20 123 456 7890"
+    },
+    {
+      "type": "text",
+      "id": "address_info_ar",
+      "label": "Address (Arabic)",
+      "default": "القاهرة، مصر"
+    },
+    {
+      "type": "text",
+      "id": "address_info_en",
+      "label": "Address (English)",
+      "default": "Cairo, Egypt"
+    }
+  ]
+}
+{% endschema %}

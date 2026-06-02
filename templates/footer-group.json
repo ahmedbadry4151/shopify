@@ -1,0 +1,17 @@
+{
+  "name": "Footer Group",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "brand_name": "أصل",
+        "copyright_ar": "© 2026 أصل. جميع الحقوق محفوظة",
+        "copyright_en": "© 2026 Asl. All rights reserved"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

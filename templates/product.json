@@ -1,0 +1,15 @@
+{
+  "name": "Product Page",
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_vendor": true,
+        "show_share_buttons": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,284 @@
+<div class="container mx-auto pt-12 pb-20 px-6">
+  <!-- Back navigation -->
+  <div class="mb-8 {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+    <a href="/collections" class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      <span>{%- if request.locale.iso_code == 'ar' -%}رجوع{%- else -%}Back{%- endif -%}</span>
+    </a>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8 lg:gap-16">
+    <!-- Left Column: Product Image Gallery -->
+    <div class="aspect-square rounded overflow-hidden bg-muted group">
+      {%- if product.featured_image != blank -%}
+        <img
+          id="ProductMainImage"
+          src="{{ product.featured_image | image_url: width: 1000 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          width="1000"
+          height="1000"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-muted' }}
+      {%- endif -%}
+    </div>
+
+    <!-- Right Column: Product Form & Info -->
+    <div class="flex flex-col justify-center {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+      <p class="text-xs text-muted-foreground uppercase tracking-widest mb-2">
+        {{ product.vendor }} — {{ product.type }}
+      </p>
+      
+      <h1 class="font-display text-3xl md:text-4xl font-bold mb-1 text-foreground">
+        {{ product.title }}
+      </h1>
+      
+      <p class="text-2xl text-primary font-bold mb-6" id="ProductPrice">
+        {{ product.selected_or_first_available_variant.price | money }}
+      </p>
+      
+      <div class="text-muted-foreground mb-8 leading-relaxed">
+        {{ product.description }}
+      </div>
+
+      {%- form 'product', product, id: 'AddToCartForm', class: 'm-0 p-0' -%}
+        <!-- Hidden variant ID input -->
+        <input 
+          type="hidden" 
+          name="id" 
+          id="SelectedVariantId" 
+          value="{{ product.selected_or_first_available_variant.id }}"
+        >
+
+        <!-- Dynamic Option Pickers -->
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="mb-6 option-selector-group" data-option-index="{{ forloop.index0 }}">
+              <p class="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                {{ option.name }}
+              </p>
+              <div class="flex gap-2 flex-wrap {% if request.locale.iso_code == 'ar' %}flex-row-reverse{% endif %}">
+                {%- for value in option.values -%}
+                  {%- assign is_selected = false -%}
+                  {%- if option.selected_value == value -%}
+                    {%- assign is_selected = true -%}
+                  {%- endif -%}
+                  <button
+                    type="button"
+                    class="option-value-btn px-4 py-2 rounded border text-xs font-medium uppercase transition-all duration-300 {% if is_selected %}bg-primary text-primary-foreground border-primary{% else %}border-border text-muted-foreground hover:border-foreground hover:text-foreground{% endif %}"
+                    data-value="{{ value | escape }}"
+                  >
+                    {{ value }}
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <!-- Add to Cart Button -->
+        <button
+          type="submit"
+          id="AddToCartSubmit"
+          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+          class="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity rounded disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+          <span id="AddToCartText">
+            {%- if product.selected_or_first_available_variant.available -%}
+              {%- if request.locale.iso_code == 'ar' -%}أضف للسلة{%- else -%}Add to Cart{%- endif -%}
+            {%- else -%}
+              {%- if request.locale.iso_code == 'ar' -%}نفذت الكمية{%- else -%}Sold Out{%- endif -%}
+            {%- endif -%}
+          </span>
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<!-- Variant mapping dictionary for Dynamic Selectors -->
+<script>
+  window.productVariants = {{ product.variants | json }};
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('AddToCartForm');
+    const selectedVariantInput = document.getElementById('SelectedVariantId');
+    const priceDisplay = document.getElementById('ProductPrice');
+    const submitBtn = document.getElementById('AddToCartSubmit');
+    const submitBtnText = document.getElementById('AddToCartText');
+    
+    // Size/Option button click handler
+    const optionGroups = document.querySelectorAll('.option-selector-group');
+    const selectedOptions = [];
+    
+    // Initialize current selected options
+    optionGroups.forEach(group => {
+      const activeBtn = group.querySelector('.option-value-btn.bg-primary');
+      if (activeBtn) {
+        const val = activeBtn.getAttribute('data-value');
+        const idx = parseInt(group.getAttribute('data-option-index'));
+        selectedOptions[idx] = val;
+      }
+    });
+
+    optionGroups.forEach(group => {
+      const buttons = group.querySelectorAll('.option-value-btn');
+      const idx = parseInt(group.getAttribute('data-option-index'));
+      
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Reset sibling buttons style
+          buttons.forEach(b => {
+            b.classList.remove('bg-primary', 'text-primary-foreground', 'border-primary');
+            b.classList.add('border-border', 'text-muted-foreground', 'hover:border-foreground', 'hover:text-foreground');
+          });
+          // Mark active button
+          btn.classList.add('bg-primary', 'text-primary-foreground', 'border-primary');
+          btn.classList.remove('border-border', 'text-muted-foreground', 'hover:border-foreground', 'hover:text-foreground');
+          
+          const value = btn.getAttribute('data-value');
+          selectedOptions[idx] = value;
+          
+          updateSelectedVariant();
+        });
+      });
+    });
+
+    function updateSelectedVariant() {
+      if (!window.productVariants) return;
+      
+      // Find matching variant based on selections
+      const matchedVariant = window.productVariants.find(variant => {
+        let isMatch = true;
+        selectedOptions.forEach((optionValue, index) => {
+          const varOpt = variant[`option${index + 1}`];
+          if (varOpt !== optionValue) {
+            isMatch = false;
+          }
+        });
+        return isMatch;
+      });
+
+      if (matchedVariant) {
+        selectedVariantInput.value = matchedVariant.id;
+        
+        // Format price using Shopify format (falls back to basic string display if no Shopify filter loaded)
+        const formattedPrice = new Intl.NumberFormat(document.documentElement.lang === 'ar' ? 'ar-EG' : 'en-US', {
+          style: 'currency',
+          currency: '{{ shop.currency }}'
+        }).format(matchedVariant.price / 100);
+        
+        priceDisplay.textContent = formattedPrice;
+        
+        if (matchedVariant.available) {
+          submitBtn.disabled = false;
+          submitBtnText.textContent = document.documentElement.lang === 'ar' ? 'أضف للسلة' : 'Add to Cart';
+        } else {
+          submitBtn.disabled = true;
+          submitBtnText.textContent = document.documentElement.lang === 'ar' ? 'نفذت الكمية' : 'Sold Out';
+        }
+      }
+    }
+
+    // Ajax Add to Cart Form Handler
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const variantId = selectedVariantInput.value;
+        const formData = {
+          items: [{
+            id: variantId,
+            quantity: 1
+          }]
+        };
+
+        submitBtn.disabled = true;
+        submitBtnText.textContent = document.documentElement.lang === 'ar' ? 'جاري الإضافة...' : 'Adding...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Add success feedback (Toast)
+          showToast(
+            document.documentElement.lang === 'ar' ? 'تمت إضافة المنتج بنجاح!' : 'Product added successfully!',
+            'success'
+          );
+          
+          // Refresh cart counter
+          fetch('/cart.js')
+          .then(res => res.json())
+          .then(cart => {
+            const bubble = document.getElementById('CartBubble');
+            if (bubble) {
+              bubble.textContent = cart.item_count;
+              if (cart.item_count > 0) {
+                bubble.classList.remove('hidden');
+              } else {
+                bubble.classList.add('hidden');
+              }
+            }
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          showToast(
+            document.documentElement.lang === 'ar' ? 'حدث خطأ أثناء الإضافة.' : 'Error adding to cart.',
+            'error'
+          );
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtnText.textContent = document.documentElement.lang === 'ar' ? 'أضف للسلة' : 'Add to Cart';
+        });
+      });
+    }
+
+    // Simple toast utility
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `fixed bottom-5 right-5 z-[9999] px-6 py-3 rounded text-sm font-semibold shadow-lg text-white transition-all duration-300 transform translate-y-10 opacity-0 ${
+        type === 'success' ? 'bg-primary' : 'bg-destructive'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 3000);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Main Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show Vendor",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

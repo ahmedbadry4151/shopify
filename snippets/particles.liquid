@@ -1,0 +1,40 @@
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+  {%- for i in (1..15) -%}
+    {%- assign random_x = i | times: 7 | modulo: 100 -%}
+    {%- assign random_y = i | times: 13 | modulo: 100 -%}
+    {%- assign size = i | modulo: 3 | plus: 1 -%}
+    {%- assign duration = i | times: 3 | modulo: 15 | plus: 10 -%}
+    {%- assign delay = i | times: 2 | modulo: 5 -%}
+    
+    <div 
+      class="absolute rounded-full bg-primary/10 particle"
+      style="
+        left: {{ random_x }}%; 
+        top: {{ random_y }}%; 
+        width: {{ size }}px; 
+        height: {{ size }}px;
+        --particle-duration: {{ duration }}s;
+        --particle-delay: {{ delay }}s;
+        --particle-offset-x: {% if i % 2 == 0 %}15px{% else %}-15px{% endif %};
+        --particle-offset-y: -30px;
+      "
+    ></div>
+  {%- endfor -%}
+</div>
+
+<style>
+  .particle {
+    animation: floatParticle var(--particle-duration) ease-in-out var(--particle-delay) infinite;
+  }
+  
+  @keyframes floatParticle {
+    0%, 100% {
+      transform: translate(0, 0);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translate(var(--particle-offset-x), var(--particle-offset-y));
+      opacity: 0.5;
+    }
+  }
+</style>

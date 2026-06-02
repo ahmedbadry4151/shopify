@@ -1,0 +1,162 @@
+<section class="relative min-h-[90vh] flex items-center overflow-hidden">
+  <div class="absolute inset-0">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 2000 }}"
+        sizes="100vw"
+        widths="375, 550, 750, 1100, 1500, 1780, 2000"
+        alt="{{ section.settings.image.alt | escape }}"
+        class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+        style="opacity: {{ section.settings.image_opacity | divided_by: 100.0 }};"
+        loading="eager"
+      >
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover bg-muted opacity-30' }}
+    {%- endif -%}
+    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40"></div>
+  </div>
+
+  <div class="container mx-auto relative z-10 py-32 px-6">
+    <div class="max-w-2xl {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+      <p class="text-primary font-medium uppercase tracking-[0.3em] text-sm mb-4 animate-fade-up">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.subheading_ar }}
+        {%- else -%}
+          {{ section.settings.subheading_en }}
+        {%- endif -%}
+      </p>
+
+      <h1 class="font-display text-5xl md:text-7xl font-bold leading-[1.05] mb-6 animate-fade-up" style="animation-delay: 100ms;">
+        <span class="inline-block text-foreground">
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.heading_ar_part1 }}
+          {%- else -%}
+            {{ section.settings.heading_en_part1 }}
+          {%- endif -%}
+        </span>
+        <span class="text-gradient-gold inline-block">
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.heading_ar_part2 }}
+          {%- else -%}
+            {{ section.settings.heading_en_part2 }}
+          {%- endif -%}
+        </span>
+      </h1>
+
+      <p class="text-muted-foreground text-lg max-w-md mb-8 animate-fade-up" style="animation-delay: 200ms;">
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.desc_ar }}
+        {%- else -%}
+          {{ section.settings.desc_en }}
+        {%- endif -%}
+      </p>
+
+      <div class="animate-fade-up" style="animation-delay: 300ms;">
+        <a href="{{ section.settings.button_link | default: '/collections' }}">
+          <button class="magnetic-btn inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity rounded">
+            {%- if request.locale.iso_code == 'ar' -%}
+              {{ section.settings.button_ar }}
+            {%- else -%}
+              {{ section.settings.button_en }}
+            {%- endif -%}
+            <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "range",
+      "id": "image_opacity",
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "default": 30,
+      "label": "Image Opacity (%)"
+    },
+    {
+      "type": "text",
+      "id": "subheading_ar",
+      "label": "Subheading (Arabic)",
+      "default": "ملابس الشارع العربية"
+    },
+    {
+      "type": "text",
+      "id": "subheading_en",
+      "label": "Subheading (English)",
+      "default": "Arabic Streetwear"
+    },
+    {
+      "type": "text",
+      "id": "heading_ar_part1",
+      "label": "Heading Part 1 (Arabic)",
+      "default": "البس"
+    },
+    {
+      "type": "text",
+      "id": "heading_ar_part2",
+      "label": "Heading Part 2 - Colored (Arabic)",
+      "default": "هويتك"
+    },
+    {
+      "type": "text",
+      "id": "heading_en_part1",
+      "label": "Heading Part 1 (English)",
+      "default": "Wear"
+    },
+    {
+      "type": "text",
+      "id": "heading_en_part2",
+      "label": "Heading Part 2 - Colored (English)",
+      "default": "Your Identity"
+    },
+    {
+      "type": "textarea",
+      "id": "desc_ar",
+      "label": "Description (Arabic)",
+      "default": "خطوط عربية جريئة. فن فرعوني. قطع أوفرسايز. ثقافتنا في كل خيط."
+    },
+    {
+      "type": "textarea",
+      "id": "desc_en",
+      "label": "Description (English)",
+      "default": "Bold Arabic calligraphy. Pharaonic art. Oversized cuts. Our culture in every thread."
+    },
+    {
+      "type": "text",
+      "id": "button_ar",
+      "label": "Button Label (Arabic)",
+      "default": "تسوّق الآن"
+    },
+    {
+      "type": "text",
+      "id": "button_en",
+      "label": "Button Label (English)",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

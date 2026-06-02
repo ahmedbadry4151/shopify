@@ -1,0 +1,45 @@
+{% comment %}
+  Renders a product card.
+  Usage:
+  {% render 'product-card', product: product, index: index %}
+{% endcomment %}
+
+<div class="product-card animate-fade-up" style="animation-delay: {{ index | times: 80 }}ms;">
+  <a href="{{ product.url }}" class="group block">
+    <div class="relative aspect-square overflow-hidden rounded bg-muted shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+      {%- if product.featured_image != blank -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          loading="lazy"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          width="600"
+          height="600"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-muted' }}
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      {%- unless product.available -%}
+        <div class="absolute inset-0 bg-background/60 flex items-center justify-center">
+          <span class="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+            {%- if request.locale.iso_code == 'ar' -%}
+              نفذت
+            {%- else -%}
+              Sold Out
+            {%- endif -%}
+          </span>
+        </div>
+      {%- endunless -%}
+    </div>
+    
+    <div class="mt-3 space-y-1 {% if request.locale.iso_code == 'ar' %}text-right{% else %}text-left{% endif %}">
+      <p class="text-xs text-muted-foreground tracking-wide uppercase">{{ product.type | default: 'T-Shirt' }}</p>
+      <h3 class="font-display font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+        {{ product.title }}
+      </h3>
+      <p class="text-sm text-primary font-semibold">{{ product.price | money }}</p>
+    </div>
+  </a>
+</div>

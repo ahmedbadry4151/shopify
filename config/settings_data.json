@@ -1,0 +1,21 @@
+{
+  "current": {
+    "color_primary": "#b99335",
+    "color_green": "#396b52",
+    "color_blue": "#2e5f8f",
+    "color_charcoal": "#2e2e2e",
+    "color_red": "#be2d2d",
+    "social_instagram_link": "https://instagram.com/asl.brand",
+    "social_tiktok_link": "https://tiktok.com/@asl.brand",
+    "sections": {}
+  },
+  "presets": {
+    "Default": {
+      "color_primary": "#b99335",
+      "color_green": "#396b52",
+      "color_blue": "#2e5f8f",
+      "color_charcoal": "#2e2e2e",
+      "color_red": "#be2d2d"
+    }
+  }
+}

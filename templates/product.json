@@ -4,8 +4,7 @@
     "main": {
       "type": "main-product",
       "settings": {
-        "show_vendor": true,
-        "show_share_buttons": true
+        "show_vendor": true
       }
     }
   },

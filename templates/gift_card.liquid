@@ -1,0 +1,39 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Gift Card</title>
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    <style>
+      body {
+        background-color: hsl(0 0% 4%);
+        color: hsl(40 20% 92%);
+        font-family: 'Outfit', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-card border border-border rounded-lg p-8 text-center shadow-2xl">
+      <h1 class="font-display text-3xl font-bold text-gradient-gold mb-2">أصل</h1>
+      <h2 class="text-xl font-semibold mb-6">Your Gift Card</h2>
+      
+      <div class="relative bg-black/40 border border-primary/20 rounded p-6 mb-6">
+        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-1">Gift Card Code</p>
+        <p class="font-mono text-xl font-bold text-primary tracking-wider">{{ gift_card.code }}</p>
+        <p class="text-2xl font-bold text-foreground mt-4">{{ gift_card.initial_value | money }}</p>
+      </div>
+
+      {%- if gift_card.expired -%}
+        <span class="text-destructive font-semibold">Expired</span>
+      {%- endif -%}
+
+      <a href="{{ shop.url }}">
+        <button class="w-full bg-primary text-primary-foreground py-3 font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity rounded">
+          Start Shopping
+        </button>
+      </a>
+    </div>
+  </body>
+</html>

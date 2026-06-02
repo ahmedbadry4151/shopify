@@ -52,7 +52,7 @@
       </p>
 
       <div class="animate-fade-up" style="animation-delay: 300ms;">
-        <a href="{{ section.settings.button_link | default: '/collections' }}">
+        <a href="{{ section.settings.button_link | default: '/collections/all' }}">
           <button class="magnetic-btn inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity rounded">
             {%- if request.locale.iso_code == 'ar' -%}
               {{ section.settings.button_ar }}

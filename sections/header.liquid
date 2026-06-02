@@ -6,11 +6,27 @@
 
     <!-- Desktop Navigation Menu -->
     <div class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
-      {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}" class="text-muted-foreground hover:text-foreground transition-colors {% if link.active %}text-primary{% endif %}">
-          {{ link.title }}
+      {%- assign nav_menu = linklists[section.settings.menu] -%}
+      {%- if nav_menu != blank and nav_menu.links.size > 0 -%}
+        {%- for link in nav_menu.links -%}
+          <a href="{{ link.url }}" class="text-muted-foreground hover:text-foreground transition-colors {% if link.active %}text-primary{% endif %}">
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="/" class="text-muted-foreground hover:text-foreground transition-colors">
+          {% if request.locale.iso_code == 'ar' %}الرئيسية{% else %}Home{% endif %}
         </a>
-      {%- endfor -%}
+        <a href="/collections/all" class="text-muted-foreground hover:text-foreground transition-colors">
+          {% if request.locale.iso_code == 'ar' %}المجموعات{% else %}Collections{% endif %}
+        </a>
+        <a href="/pages/story" class="text-muted-foreground hover:text-foreground transition-colors">
+          {% if request.locale.iso_code == 'ar' %}قصتنا{% else %}Our Story{% endif %}
+        </a>
+        <a href="/pages/contact" class="text-muted-foreground hover:text-foreground transition-colors">
+          {% if request.locale.iso_code == 'ar' %}تواصل معنا{% else %}Contact{% endif %}
+        </a>
+      {%- endif -%}
     </div>
 
     <div class="flex items-center gap-3">
@@ -59,11 +75,27 @@
   <!-- Mobile Dropdown Navigation Menu -->
   <div id="MobileMenu" class="hidden md:hidden border-t border-border bg-background/95 backdrop-blur-xl overflow-hidden transition-all duration-300 max-h-0">
     <div class="container mx-auto py-4 px-6 flex flex-col gap-4">
-      {%- for link in linklists[section.settings.menu].links -%}
-        <a href="{{ link.url }}" class="text-sm tracking-wide text-muted-foreground hover:text-foreground {% if link.active %}text-primary{% endif %}">
-          {{ link.title }}
+      {%- assign nav_menu = linklists[section.settings.menu] -%}
+      {%- if nav_menu != blank and nav_menu.links.size > 0 -%}
+        {%- for link in nav_menu.links -%}
+          <a href="{{ link.url }}" class="text-sm tracking-wide text-muted-foreground hover:text-foreground {% if link.active %}text-primary{% endif %}">
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="/" class="text-sm tracking-wide text-muted-foreground hover:text-foreground">
+          {% if request.locale.iso_code == 'ar' %}الرئيسية{% else %}Home{% endif %}
         </a>
-      {%- endfor -%}
+        <a href="/collections/all" class="text-sm tracking-wide text-muted-foreground hover:text-foreground">
+          {% if request.locale.iso_code == 'ar' %}المجموعات{% else %}Collections{% endif %}
+        </a>
+        <a href="/pages/story" class="text-sm tracking-wide text-muted-foreground hover:text-foreground">
+          {% if request.locale.iso_code == 'ar' %}قصتنا{% else %}Our Story{% endif %}
+        </a>
+        <a href="/pages/contact" class="text-sm tracking-wide text-muted-foreground hover:text-foreground">
+          {% if request.locale.iso_code == 'ar' %}تواصل معنا{% else %}Contact{% endif %}
+        </a>
+      {%- endif -%}
     </div>
   </div>
 </nav>

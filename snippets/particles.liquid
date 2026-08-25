@@ -15,7 +15,7 @@
         height: {{ size }}px;
         --particle-duration: {{ duration }}s;
         --particle-delay: {{ delay }}s;
-        --particle-offset-x: {% if i % 2 == 0 %}15px{% else %}-15px{% endif %};
+        --particle-offset-x: {% if i %}15px{% else %}-15px{% endif %};
         --particle-offset-y: -30px;
       "
     ></div>
@@ -38,3 +38,13 @@
     }
   }
 </style>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% if i % 2 == 0 %}"
+  to: "{% if i %}"
+  position: 724..734
+{% endcomment %}
